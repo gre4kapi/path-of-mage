@@ -16,7 +16,7 @@ public class ManaData {
             mana += amount;
         }
         nbt.putInt("mana", mana);
-        //sync the data
+        syncMana(mana, (ServerPlayerEntity) player);
         return mana;
     }
 
@@ -30,7 +30,7 @@ public class ManaData {
             mana -= amount;
         }
         nbt.putInt("mana", mana);
-        //sync the data
+        syncMana(mana, (ServerPlayerEntity) player);
         return mana;
     }
     public static void syncMana(int mana, ServerPlayerEntity player) {

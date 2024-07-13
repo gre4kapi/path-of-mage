@@ -24,7 +24,7 @@ public class ClientPackets {
                 }
             }
             else if (payload.speech().equals("мана")) {
-                ManaData.addMana(((IDataSaver) context.player()), 5);
+                ManaData.addMana(((IDataSaver) context.player()), 100);
                 context.player().sendMessage(Text.of("Mana: " + ((IDataSaver) context.player()).getPersistentData().getInt("mana")), true);
             }
             });

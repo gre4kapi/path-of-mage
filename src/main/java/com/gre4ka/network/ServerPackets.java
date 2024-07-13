@@ -14,7 +14,7 @@ import net.minecraft.text.Text;
 public class ServerPackets {
     public static void registerS2CPackets(){
         ClientPlayNetworking.registerGlobalReceiver(ManaSyncPayload.ID, (payload, context) -> {context.client().execute(() ->{
-
+            ((IDataSaver) context.player()).getPersistentData().putInt("mana", payload.mana());
         });
         });
     }
