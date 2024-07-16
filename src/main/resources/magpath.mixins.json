@@ -1,11 +1,12 @@
 {
-	"required": true,
-	"package": "com.gre4ka.mixin",
-	"compatibilityLevel": "JAVA_21",
-	"mixins": [
-      "DataSaverMixin"
-	],
-	"injectors": {
-		"defaultRequire": 1
+  "required": true,
+  "package": "com.gre4ka.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "DataSaverMixin",
+    "PlayerTickMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
 	}
 }

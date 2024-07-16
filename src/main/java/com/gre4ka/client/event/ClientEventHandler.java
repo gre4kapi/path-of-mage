@@ -1,11 +1,11 @@
-package com.gre4ka.event;
+package com.gre4ka.client.event;
 
 import com.gre4ka.PathOfMage;
-import com.gre4ka.PathOfMageClient;
 import com.gre4ka.config.ConfigUI;
 import com.gre4ka.network.payload.SpeechPayload;
-import com.gre4ka.render.ManaHudOverlay;
+import com.gre4ka.client.render.ManaHudOverlay;
 import com.gre4ka.util.MicrophoneHandler;
+import com.gre4ka.util.ModRegistry;
 import com.gre4ka.util.SpeechRecognizer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
@@ -22,7 +22,7 @@ import javax.sound.sampled.AudioFormat;
  * This class is used to register response processing for game events.
  * This includes the function of initializing the speech recognizer when the game starts and the task of detecting that the user presses the key V to initiate speech recognition and send a message.
  * @author Jaffe2718*/
-public class EventHandler {
+public class ClientEventHandler {
 
     /** The following variables are used to store the speech recognizer*/
     private static MicrophoneHandler microphoneHandler;
@@ -39,13 +39,13 @@ public class EventHandler {
     /** This method is used to register the response processing for the game start event*/
     public static void register() {
 
-        ClientLifecycleEvents.CLIENT_STARTED.register(EventHandler::handelClientStartEvent);
+        ClientLifecycleEvents.CLIENT_STARTED.register(ClientEventHandler::handelClientStartEvent);
 
-        ClientTickEvents.END_CLIENT_TICK.register(EventHandler::handleEndClientTickEvent);
+        ClientTickEvents.END_CLIENT_TICK.register(ClientEventHandler::handleEndClientTickEvent);
 
-        ClientTickEvents.START_CLIENT_TICK.register(EventHandler::handleStartClientTickEvent);
+        ClientTickEvents.START_CLIENT_TICK.register(ClientEventHandler::handleStartClientTickEvent);
 
-        ClientLifecycleEvents.CLIENT_STOPPING.register(EventHandler::handleClientStopEvent);
+        ClientLifecycleEvents.CLIENT_STOPPING.register(ClientEventHandler::handleClientStopEvent);
 
         HudRenderCallback.EVENT.register(new ManaHudOverlay());
     }
@@ -71,7 +71,8 @@ public class EventHandler {
                 } else {                                 // If the speech recognizer and the microphone handler are initialized successfully
                     String tmp = speechRecognizer.getStringMsg(microphoneHandler.readData());
                     if (!tmp.equals("") && !tmp.equals(lastResult) &&
-                            PathOfMageClient.vKeyBinding.isPressed()) {   // Read audio data from the microphone and send it to the speech recognizer for recognition
+                            MinecraftClient.getInstance().player.getActiveItem().getItem() == ModRegistry.WAND &&
+                            MinecraftClient.getInstance().player.isUsingItem()) {   // Read audio data from the microphone and send it to the speech recognizer for recognition
                         if (ConfigUI.encoding_repair) {
                             lastResult = SpeechRecognizer.repairEncoding(tmp, ConfigUI.srcEncoding, ConfigUI.dstEncoding);
                         } else {                                        // default configuration without encoding repair
@@ -104,7 +105,7 @@ public class EventHandler {
             PathOfMage.LOGGER.warn(
                     String.format("(test function) Trt to resolve error encoding from %s to %s...", ConfigUI.srcEncoding, ConfigUI.dstEncoding));
         }
-        listenThread = new Thread(EventHandler::listenThreadTask);
+        listenThread = new Thread(ClientEventHandler::listenThreadTask);
         listenThread.start();
     }
 
@@ -118,7 +119,10 @@ public class EventHandler {
 
     private static void handleEndClientTickEvent(MinecraftClient client) {     // When the client ticks, check if the user presses the key V
         if (client.player!=null &&                                             // If the player is not null
-                PathOfMageClient.vKeyBinding.isPressed() &&           // If the user presses the key V
+                //PathOfMageClient.vKeyBinding.isPressed() &&           // If the user presses the key V
+                //MinecraftClient.getInstance().mouse.wasRightButtonClicked() &&
+                MinecraftClient.getInstance().player.isUsingItem() &&
+                MinecraftClient.getInstance().player.getActiveItem().getItem() == ModRegistry.WAND &&
                 microphoneHandler != null &&                                   // If the microphone initialization is successful
                 !lastResult.equals("")) {                                      // If the recognized text is not empty
             // Send the recognized text to the server as a chat message automatically
@@ -126,17 +130,17 @@ public class EventHandler {
                 client.player.networkHandler.sendChatMessage(lastResult);
                 PathOfMage.LOGGER.info("§aMessage Sent: " + lastResult);
                 ClientPlayNetworking.send(new SpeechPayload(lastResult));
-            } else {
+            } /*else {
                 //client.setScreen(new ChatScreen(ConfigUI.prefix + " " + lastResult));
                 client.setScreen(new ChatScreen(lastResult));
                 if (client.currentScreen!=null) client.currentScreen.applyKeyPressNarratorDelay();
-            }
+            }*/
             lastResult = "";                                                   // Clear the recognized text
         }
     }
 
     private static void handleStartClientTickEvent(MinecraftClient client) {  // handle another client tick event to notify the user that the speech recognition is in progress and the game is not frozen
-        if (client.player!=null && PathOfMageClient.vKeyBinding.isPressed()) {  // If the user presses the key V
+        if (client.player!=null && MinecraftClient.getInstance().player.isUsingItem() && MinecraftClient.getInstance().player.getActiveItem().getItem() == ModRegistry.WAND) {  // If the user presses the key V
             //client.player.sendMessage(Text.of("§eRecording & Recognizing..."), true);
         } else if (lastResult.length() > 0) {
             lastResult = "";

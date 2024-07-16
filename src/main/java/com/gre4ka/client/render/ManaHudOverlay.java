@@ -1,6 +1,5 @@
-package com.gre4ka.render;
+package com.gre4ka.client.render;
 
-import com.gre4ka.PathOfMage;
 import com.gre4ka.PathOfMageClient;
 import com.gre4ka.util.IDataSaver;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -9,10 +8,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
-import net.minecraft.util.ColorCode;
 import net.minecraft.util.Identifier;
 
-import java.awt.*;
 import java.util.Random;
 
 public class ManaHudOverlay implements HudRenderCallback {

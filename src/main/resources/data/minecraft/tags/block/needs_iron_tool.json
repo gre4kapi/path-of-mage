@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "values": [
+    "magpath:diamond_block",
+    "magpath:refined_diamond_block"
+  ]
+}

@@ -4,7 +4,10 @@ import com.gre4ka.config.ConfigUI;
 import com.gre4ka.network.ClientPackets;
 import com.gre4ka.network.ServerPackets;
 import com.gre4ka.network.payload.ManaSyncPayload;
+import com.gre4ka.network.payload.MaxManaSyncPayload;
 import com.gre4ka.network.payload.SpeechPayload;
+import com.gre4ka.server.ServerEventHandler;
+import com.gre4ka.util.ModRegistry;
 import net.fabricmc.api.ModInitializer;
 import eu.midnightdust.lib.config.MidnightConfig;
 
@@ -38,9 +41,13 @@ public class PathOfMage implements ModInitializer {
 		MidnightConfig.init(MOD_ID, ConfigUI.class);
 
 		PayloadTypeRegistry.playS2C().register(ManaSyncPayload.ID, ManaSyncPayload.CODEC);
+		PayloadTypeRegistry.playS2C().register(MaxManaSyncPayload.ID, MaxManaSyncPayload.CODEC);
 
 		PayloadTypeRegistry.playC2S().register(SpeechPayload.ID, SpeechPayload.CODEC);
 		ClientPackets.registerC2SPackets();
 
+		ServerEventHandler.register();
+
+		ModRegistry.register();
 	}
 }

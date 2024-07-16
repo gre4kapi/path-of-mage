@@ -1,0 +1,5 @@
+{
+  "variants": {
+    "": { "model": "magpath:block/diamond_block" }
+  }
+}
