@@ -10,5 +10,9 @@ public class ClientPackets {
             Spells.spell(payload, context);
             });
         });
+        /*ServerPlayNetworking.registerGlobalReceiver(.ID, (payload, context) -> {context.server().execute(() ->{
+            Spells.spell(payload, context);
+        });
+        });*/
     }
 }

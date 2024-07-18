@@ -1,19 +1,27 @@
 package com.gre4ka.client.event;
 
 import com.gre4ka.PathOfMage;
+import com.gre4ka.PathOfMageClient;
 import com.gre4ka.config.ConfigUI;
+import com.gre4ka.network.ServerPackets;
 import com.gre4ka.network.payload.SpeechPayload;
 import com.gre4ka.client.render.ManaHudOverlay;
 import com.gre4ka.util.MicrophoneHandler;
 import com.gre4ka.util.ModRegistry;
 import com.gre4ka.util.SpeechRecognizer;
+import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.ChatScreen;
+import net.minecraft.client.option.KeyBinding;
+import net.minecraft.client.render.RenderLayer;
+import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
+import org.lwjgl.glfw.GLFW;
 import org.vosk.Model;
 
 import javax.sound.sampled.AudioFormat;
@@ -23,6 +31,9 @@ import javax.sound.sampled.AudioFormat;
  * This includes the function of initializing the speech recognizer when the game starts and the task of detecting that the user presses the key V to initiate speech recognition and send a message.
  * @author Jaffe2718*/
 public class ClientEventHandler {
+
+    public static KeyBinding vKeyBinding;
+    public static KeyBinding mKeyBinding;
 
     /** The following variables are used to store the speech recognizer*/
     private static MicrophoneHandler microphoneHandler;
@@ -38,7 +49,7 @@ public class ClientEventHandler {
 
     /** This method is used to register the response processing for the game start event*/
     public static void register() {
-
+        registerKeyBinds();
         ClientLifecycleEvents.CLIENT_STARTED.register(ClientEventHandler::handelClientStartEvent);
 
         ClientTickEvents.END_CLIENT_TICK.register(ClientEventHandler::handleEndClientTickEvent);
@@ -48,6 +59,12 @@ public class ClientEventHandler {
         ClientLifecycleEvents.CLIENT_STOPPING.register(ClientEventHandler::handleClientStopEvent);
 
         HudRenderCallback.EVENT.register(new ManaHudOverlay());
+    }
+    public static void registerKeyBinds(){
+        vKeyBinding = new KeyBinding("key.magpath.mic", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyBinding.MISC_CATEGORY);
+        mKeyBinding = new KeyBinding("key.magpath.vision", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_M, KeyBinding.MISC_CATEGORY);
+        KeyBindingHelper.registerKeyBinding(vKeyBinding);
+        KeyBindingHelper.registerKeyBinding(mKeyBinding);
     }
 
     private static void listenThreadTask() {
@@ -128,13 +145,9 @@ public class ClientEventHandler {
             // Send the recognized text to the server as a chat message automatically
             if (ConfigUI.autoSend) {
                 client.player.networkHandler.sendChatMessage(lastResult);
-                PathOfMage.LOGGER.info("§aMessage Sent: " + lastResult);
-                ClientPlayNetworking.send(new SpeechPayload(lastResult));
-            } /*else {
-                //client.setScreen(new ChatScreen(ConfigUI.prefix + " " + lastResult));
-                client.setScreen(new ChatScreen(lastResult));
-                if (client.currentScreen!=null) client.currentScreen.applyKeyPressNarratorDelay();
-            }*/
+            }
+            ClientPlayNetworking.send(new SpeechPayload(lastResult));
+            PathOfMage.LOGGER.info("§aMessage Sent: " + lastResult);
             lastResult = "";                                                   // Clear the recognized text
         }
     }

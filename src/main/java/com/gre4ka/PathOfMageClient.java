@@ -12,7 +12,6 @@ import net.minecraft.client.util.InputUtil;
 import org.lwjgl.glfw.GLFW;
 
 public class PathOfMageClient implements ClientModInitializer {
-	public static KeyBinding vKeyBinding;
 
 	public static final String MOD_ID = "magpath";
 
@@ -21,8 +20,6 @@ public class PathOfMageClient implements ClientModInitializer {
 
 		ServerPackets.registerS2CPackets();
 
-		vKeyBinding = new KeyBinding("key.magpath.mic", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyBinding.MISC_CATEGORY);
-		KeyBindingHelper.registerKeyBinding(vKeyBinding);
 		ClientEventHandler.register();
 
 		BlockRenderLayerMap.INSTANCE.putBlock(ModRegistry.REFINED_DIAMOND_BLOCK, RenderLayer.getCutout());

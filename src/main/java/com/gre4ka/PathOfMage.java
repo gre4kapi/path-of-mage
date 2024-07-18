@@ -2,6 +2,7 @@ package com.gre4ka;
 
 import com.gre4ka.config.ConfigUI;
 import com.gre4ka.network.ClientPackets;
+import com.gre4ka.network.PayloadRegistry;
 import com.gre4ka.network.ServerPackets;
 import com.gre4ka.network.payload.ManaSyncPayload;
 import com.gre4ka.network.payload.MaxManaSyncPayload;
@@ -33,17 +34,10 @@ public class PathOfMage implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
-		// This code runs as soon as Minecraft is in a mod-load-ready state.
-		// However, some things (like resources) may still be uninitialized.
-		// Proceed with mild caution.
 
 		LOGGER.info("Path of Mage mod is initializing...");
 		MidnightConfig.init(MOD_ID, ConfigUI.class);
-
-		PayloadTypeRegistry.playS2C().register(ManaSyncPayload.ID, ManaSyncPayload.CODEC);
-		PayloadTypeRegistry.playS2C().register(MaxManaSyncPayload.ID, MaxManaSyncPayload.CODEC);
-
-		PayloadTypeRegistry.playC2S().register(SpeechPayload.ID, SpeechPayload.CODEC);
+		PayloadRegistry.registerPacketPayloads();
 		ClientPackets.registerC2SPackets();
 
 		ServerEventHandler.register();

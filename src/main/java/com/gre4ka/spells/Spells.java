@@ -15,15 +15,15 @@ public class Spells {
             if ((((IDataSaver) context.player()).getPersistentData().getInt("mana")) >= 10) {
                 EntityType.PIG.spawn((ServerWorld) context.player().getWorld(), context.player().getBlockPos(), SpawnReason.TRIGGERED);
                 PlayerData.removePlayerMana(((IDataSaver) context.player()), 10);
-                //context.player().sendMessage(Text.of("Mana: " + ((IDataSaver) context.player()).getPersistentData().getInt("mana")), true);
+                context.player().sendMessage(Text.of("Mana: " + ((IDataSaver) context.player()).getPersistentData().getInt("mana")), true);
             }
             else {
-                //context.player().sendMessage(Text.of("Not enough Mana"), true);
+                context.player().sendMessage(Text.of("Not enough Mana"), true);
             }
         }
         else if (payload.speech().equals("мана")) {
             PlayerData.addPlayerMana(((IDataSaver) context.player()), 100);
-            //context.player().sendMessage(Text.of("Mana: " + ((IDataSaver) context.player()).getPersistentData().getInt("mana")), true);
+            context.player().sendMessage(Text.of("Mana: " + ((IDataSaver) context.player()).getPersistentData().getInt("mana")), true);
         }
     }
 }

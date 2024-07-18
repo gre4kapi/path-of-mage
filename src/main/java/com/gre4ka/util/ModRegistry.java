@@ -5,10 +5,16 @@ import com.gre4ka.blockentity.storage.DiamondBlockEntity;
 import com.gre4ka.blockentity.storage.RefinedDiamondBlockEntity;
 import com.gre4ka.blocks.DiamondBlock;
 import com.gre4ka.blocks.RefinedDiamondBlock;
+import com.gre4ka.items.food.ManaAppleItem;
 import com.gre4ka.items.tool.WandItem;
+import com.gre4ka.network.payload.ManaGenSpdSyncPayload;
+import com.gre4ka.network.payload.ManaSyncPayload;
+import com.gre4ka.network.payload.MaxManaSyncPayload;
+import com.gre4ka.network.payload.SpeechPayload;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroupEntries;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -37,6 +43,7 @@ public class ModRegistry {
     private static final HashMap<Object, Identifier> objIdentMap = new HashMap<>();
 
     public static Item WAND;
+    public static Item MANA_APPLE;
 
     public static Block REFINED_DIAMOND_BLOCK;
     public static Block DIAMOND_BLOCK;
@@ -46,9 +53,11 @@ public class ModRegistry {
     public static BlockEntityType<RefinedDiamondBlockEntity> REFINED_DIAMOND_MANA_STORAGE;
 
     public static void register(){
+        //registerPacketPayloads();
         registerItems();
         registerBlocks();
         registerBlockEntities();
+
 
         /*		registerFluids();
 		registerSounds();
@@ -83,6 +92,7 @@ public class ModRegistry {
     }
     private static void registerItems(){
         registerItem(WAND = InitUtils.setup(new WandItem(), "wand"));
+        registerItem(MANA_APPLE = InitUtils.setup(new ManaAppleItem(), "mana_apple"));
     }
 
     public static void registerBlock(Block block, Item.Settings builder, Identifier name) {
