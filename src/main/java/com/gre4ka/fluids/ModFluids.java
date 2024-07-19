@@ -1,15 +1,10 @@
 package com.gre4ka.fluids;
 
 import com.gre4ka.PathOfMage;
-import com.mojang.serialization.Decoder;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
-import net.fabricmc.fabric.api.client.render.fluid.v1.FluidRenderHandlerRegistry;
-import net.fabricmc.fabric.api.client.render.fluid.v1.SimpleFluidRenderHandler;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.FluidBlock;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.fluid.FlowableFluid;
 import net.minecraft.item.BucketItem;
 import net.minecraft.item.Item;
@@ -31,12 +26,5 @@ public class ModFluids {
         SKHARNA_BUCKET = Registry.register(Registries.ITEM, Identifier.of(PathOfMage.MOD_ID, "skharna_bucket"),
                 new BucketItem(STILL_SKHARNA, new Item.Settings().recipeRemainder(Items.BUCKET).maxCount(1)));
     }
-    public static void fluidRender(){
-        FluidRenderHandlerRegistry.INSTANCE.register(STILL_SKHARNA, FLOWING_SKHARNA,
-                new SimpleFluidRenderHandler(
-                    Identifier.of("minecraft:block/water_still"),
-                    Identifier.of("minecraft:block/water_flow"), 0xC1CCCCCC
-                ));
-        BlockRenderLayerMap.INSTANCE.putFluids(RenderLayer.getTranslucent(), STILL_SKHARNA, FLOWING_SKHARNA);
-    }
+
 }

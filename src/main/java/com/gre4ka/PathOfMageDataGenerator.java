@@ -1,6 +1,7 @@
 package com.gre4ka;
 
 import com.gre4ka.datagen.ModWorldGenerator;
+import com.gre4ka.world.biome.ModBiomes;
 import com.gre4ka.world.dimension.ModDimensions;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
@@ -15,6 +16,7 @@ public class PathOfMageDataGenerator implements DataGeneratorEntrypoint {
 	}
 	@Override
 	public void buildRegistry(RegistryBuilder registryBuilder){
+		registryBuilder.addRegistry(RegistryKeys.BIOME, ModBiomes::boostrap);
 		registryBuilder.addRegistry(RegistryKeys.DIMENSION_TYPE, ModDimensions::bootstrapType);
 	}
 }

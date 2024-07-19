@@ -1,24 +1,19 @@
 package com.gre4ka.client.event;
 
 import com.gre4ka.PathOfMage;
-import com.gre4ka.PathOfMageClient;
 import com.gre4ka.config.ConfigUI;
-import com.gre4ka.network.ServerPackets;
 import com.gre4ka.network.payload.SpeechPayload;
-import com.gre4ka.client.render.ManaHudOverlay;
+import com.gre4ka.client.render.player.ManaHudOverlay;
 import com.gre4ka.util.MicrophoneHandler;
 import com.gre4ka.util.ModRegistry;
 import com.gre4ka.util.SpeechRecognizer;
-import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientLifecycleEvents;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.gui.screen.ChatScreen;
 import net.minecraft.client.option.KeyBinding;
-import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.util.InputUtil;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;

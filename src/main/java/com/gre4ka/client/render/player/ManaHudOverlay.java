@@ -1,6 +1,5 @@
-package com.gre4ka.client.render;
+package com.gre4ka.client.render.player;
 
-import com.gre4ka.PathOfMage;
 import com.gre4ka.PathOfMageClient;
 import com.gre4ka.client.event.ClientEventHandler;
 import com.gre4ka.util.IDataSaver;
@@ -12,8 +11,6 @@ import net.minecraft.client.render.GameRenderer;
 import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
-
-import java.util.Random;
 
 public class ManaHudOverlay implements HudRenderCallback {
 

@@ -33,7 +33,7 @@ public class ModDimensions {
                 true, // natural
                 1.0, // coordinateScale
                 true, // bedWorks
-                false, // respawnAnchorWorks
+                true, // respawnAnchorWorks
                 0, // minY
                 256, // height
                 256, // logicalHeight
