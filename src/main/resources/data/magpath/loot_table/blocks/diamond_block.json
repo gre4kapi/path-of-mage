@@ -2,18 +2,28 @@
   "type": "minecraft:block",
   "pools": [
     {
-      "rolls": 1.0,
-      "entries": [
-        {
-          "type": "minecraft:item",
-          "name": "magpath:diamond_block"
-        }
-      ],
+      "bonus_rolls": 0.0,
       "conditions": [
         {
           "condition": "minecraft:survives_explosion"
         }
-      ]
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:copy_components",
+              "include": [
+                "magpath:manaComponent"
+              ],
+              "source": "block_entity"
+            }
+          ],
+          "name": "magpath:diamond_block"
+        }
+      ],
+      "rolls": 1.0
     }
   ]
 }

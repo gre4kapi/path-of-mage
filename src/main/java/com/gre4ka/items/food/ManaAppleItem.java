@@ -4,6 +4,7 @@ import com.gre4ka.util.IDataSaver;
 import com.gre4ka.util.PlayerData;
 import net.minecraft.component.type.FoodComponent;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -17,7 +18,7 @@ public class ManaAppleItem extends Item {
     @Override
     public ItemStack finishUsing(ItemStack stack, World world, LivingEntity user){
         if (!world.isClient && user.isPlayer()){
-            PlayerData.addPlayerMana((IDataSaver) user, 1000);
+            PlayerData.addPlayerMana((PlayerEntity) user, 1000);
         }
         return Items.APPLE.finishUsing(stack, world, user);
     }

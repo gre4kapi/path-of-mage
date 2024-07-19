@@ -1,11 +1,18 @@
 package com.gre4ka.util;
 
 import com.gre4ka.PathOfMage;
+import com.gre4ka.effects.MagicalExhaustionEffect;
 import com.gre4ka.network.payload.ManaGenSpdSyncPayload;
 import com.gre4ka.network.payload.ManaSyncPayload;
 import com.gre4ka.network.payload.MaxManaSyncPayload;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.nio.file.Path;
@@ -16,9 +23,8 @@ public class PlayerData {
     public static int maxMana;
     public static float manaGenSpd;
 
-    public static int addPlayerMana(IDataSaver player, int amount){
-        PathOfMage.LOGGER.info("tryind add mana: " + amount);
-        NbtCompound nbt = player.getPersistentData();
+    public static int addPlayerMana(PlayerEntity player, int amount){
+        NbtCompound nbt = ((IDataSaver) player).getPersistentData();
         mana = nbt.getInt("mana");
         maxMana = nbt.getInt("maxMana");
         if (mana + amount >= maxMana){
@@ -32,15 +38,17 @@ public class PlayerData {
         return mana;
     }
 
-    public static int removePlayerMana(IDataSaver player, int amount){
-        NbtCompound nbt = player.getPersistentData();
+    public static int removePlayerMana(PlayerEntity player, int amount){
+        NbtCompound nbt = ((IDataSaver) player).getPersistentData();
         mana = nbt.getInt("mana");
         maxMana = nbt.getInt("maxMana");
-        if (mana - amount < 0){
-            mana = 0;
+        int tmpMana = mana - amount;
+        if (tmpMana < 0 && tmpMana > -100){
+            mana = tmpMana;
+            player.addStatusEffect(new StatusEffectInstance(ModRegistry.MAGICAL_EXHAUSTION, 100, 3));
         }
         else{
-            mana -= amount;
+            mana = tmpMana;
         }
         nbt.putInt("mana", mana);
         syncMana(mana, (ServerPlayerEntity) player);

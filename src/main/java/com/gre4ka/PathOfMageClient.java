@@ -1,6 +1,7 @@
 package com.gre4ka;
 
 import com.gre4ka.client.event.ClientEventHandler;
+import com.gre4ka.fluids.ModFluids;
 import com.gre4ka.network.ServerPackets;
 import com.gre4ka.util.ModRegistry;
 import net.fabricmc.api.ClientModInitializer;
@@ -21,6 +22,8 @@ public class PathOfMageClient implements ClientModInitializer {
 		ServerPackets.registerS2CPackets();
 
 		ClientEventHandler.register();
+
+		ModFluids.fluidRender();
 
 		BlockRenderLayerMap.INSTANCE.putBlock(ModRegistry.REFINED_DIAMOND_BLOCK, RenderLayer.getCutout());
 		BlockRenderLayerMap.INSTANCE.putBlock(ModRegistry.REFINED_DIAMOND_BLOCK, RenderLayer.getTranslucent());

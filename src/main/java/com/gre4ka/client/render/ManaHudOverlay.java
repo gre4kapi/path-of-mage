@@ -50,8 +50,8 @@ public class ManaHudOverlay implements HudRenderCallback {
                 int mana = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getInt("mana");
                 int maxMana = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getInt("maxMana");
                 float manaGenSpd = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getFloat("manaGenSpd");
-                Random r = new Random();
-                for (int i = 0; i < mana; i++) {
+                int step = maxMana / 100;
+                for (int i = 0; i < mana / step; i++) {
                     drawContext.drawHorizontalLine(x + 2, x + 27, y + 101 - i, 0xBB5522FF);
                 }
                 drawContext.drawText(client.textRenderer, Text.of("Mana: " + String.valueOf(mana) + " MaxMana: " + String.valueOf(maxMana) + " ManaGenSpd: " + String.valueOf(manaGenSpd)), x, y, 0xFFFFFFFF, false);

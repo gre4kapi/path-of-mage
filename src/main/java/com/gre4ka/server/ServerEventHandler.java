@@ -55,7 +55,7 @@ public class ServerEventHandler {
             nbt.putBoolean("trueVision", false);
             ServerPlayNetworking.send(srvPlayer, new TrueVisionSyncPayload(false));
         }
-        //ServerPlayNetworking.send(srvPlayer, new TrueVisionSyncPayload(false));
+        ServerPlayNetworking.send(srvPlayer, new TrueVisionSyncPayload(true));
         int mana = player.getPersistentData().getInt("mana");
         int maxMana = player.getPersistentData().getInt("maxMana");
         float manaGenSpd = player.getPersistentData().getFloat("manaGenSpd");

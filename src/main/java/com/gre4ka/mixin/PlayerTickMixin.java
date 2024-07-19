@@ -32,7 +32,7 @@ public abstract class PlayerTickMixin {
 				m = 100;
 			}
 			if (timer % m == 0) {
-				PlayerData.addPlayerMana(((IDataSaver) player), 1);
+				PlayerData.addPlayerMana(player, 1);
 			}
 		}
 		timer++;
