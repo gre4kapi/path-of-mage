@@ -1,5 +1,9 @@
 package com.gre4ka.blocks;
 
+import com.gre4ka.blockentity.storage.DiamondBlockEntity;
+import com.gre4ka.blockentity.storage.ManaStorageBlockEntity;
+import com.gre4ka.util.IDataSaver;
+import com.gre4ka.util.PlayerData;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -14,6 +18,8 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
@@ -37,7 +43,7 @@ public class ManaStorageBlock extends Block{
     public static int getLuminance(BlockState currentBlockState) {
         return currentBlockState.get(MANA);
     }
-    @Override
+    /*@Override
     public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
         BlockEntity blockEntity = world.getBlockEntity(pos);
             if (!world.isClient) {
@@ -48,6 +54,16 @@ public class ManaStorageBlock extends Block{
                 world.spawnEntity(itemEntity);
             }
             return super.onBreak(world, pos, state, player);
+    }*/
+    @Override
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        if (!world.isClient) {
+            if(world.getBlockEntity(pos) instanceof ManaStorageBlockEntity blockEntity){
+                blockEntity.addStorageMana(player, pos, state);
+            }
+        }
+        return ActionResult.SUCCESS;
     }
+
 
 }

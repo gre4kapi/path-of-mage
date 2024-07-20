@@ -17,15 +17,4 @@ public class RefinedDiamondBlock extends ManaStorageBlock implements BlockEntity
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new RefinedDiamondBlockEntity(pos, state);
     }
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) {
-            RefinedDiamondBlockEntity blockEntity = (RefinedDiamondBlockEntity) world.getBlockEntity(pos);
-            int playermana = PlayerData.readPlayerMana((IDataSaver) player);
-            int blockmana = blockEntity.getStorageMana();
-            blockEntity.addStorageMana(player, pos, state);
-        }
-
-        return ActionResult.SUCCESS;
-    }
 }

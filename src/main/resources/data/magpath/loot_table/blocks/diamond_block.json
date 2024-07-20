@@ -15,7 +15,7 @@
             {
               "function": "minecraft:copy_components",
               "include": [
-                "magpath:manaComponent"
+                "magpath:mana_component"
               ],
               "source": "block_entity"
             }

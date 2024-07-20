@@ -1,18 +1,29 @@
 package com.gre4ka.server;
 
 import com.gre4ka.PathOfMage;
+import com.gre4ka.blockentity.storage.ManaStorageBlockEntity;
+import com.gre4ka.blocks.ManaStorageBlock;
 import com.gre4ka.network.payload.ManaSyncPayload;
 import com.gre4ka.network.payload.TrueVisionSyncPayload;
 import com.gre4ka.util.IDataSaver;
 import com.gre4ka.util.PlayerData;
+import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -24,6 +35,19 @@ public class ServerEventHandler {
     public static void register() {
         //ServerTickEvents.START_SERVER_TICK.register(ServerEventHandler::serverTickEvent);
         ServerPlayConnectionEvents.JOIN.register(ServerEventHandler::joinEvent);
+        AttackBlockCallback.EVENT.register(ServerEventHandler::onLeftClickBlock);
+    }
+
+    private static ActionResult onLeftClickBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
+        if(!world.isClient()) {
+            BlockState state = world.getBlockState(pos);
+            if (state.getBlock() instanceof ManaStorageBlock) {
+                if(world.getBlockEntity(pos) instanceof ManaStorageBlockEntity blockEntity){
+                    blockEntity.retrieveStorageMana(player, pos, state);
+                }
+            }
+        }
+        return ActionResult.SUCCESS;
     }
 
     private static void joinEvent(ServerPlayNetworkHandler serverPlayNetworkHandler, PacketSender packetSender, MinecraftServer minecraftServer) {
@@ -61,13 +85,5 @@ public class ServerEventHandler {
         float manaGenSpd = player.getPersistentData().getFloat("manaGenSpd");
         PlayerData.syncAll(mana, maxMana, manaGenSpd, serverPlayNetworkHandler.player);
 
-    }
-
-    private static void serverTickEvent(MinecraftServer minecraftServer) {
-        if ((timer % 600) == 0){
-
-            timer = 0;
-        }
-        timer++;
     }
 }

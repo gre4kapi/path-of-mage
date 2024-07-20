@@ -98,6 +98,30 @@ public class ManaStorageBlockEntity extends BlockEntity {
         }
         mana += tmpMana;
         PlayerData.removePlayerMana(player, tmpMana);
+        setState(state, mana, maxStorage);
+        PathOfMage.LOGGER.info("Block: " + mana);
+        markDirty();
+    }
+    public void retrieveStorageMana(PlayerEntity player, BlockPos pos, BlockState state) {
+        int tmpMana;
+        int playermana = PlayerData.readPlayerMana((IDataSaver) player);
+        if (playermana >= maxInput){
+            tmpMana = maxInput;
+        }
+        else{
+            tmpMana = playermana;
+        }
+        if (tmpMana + mana >= maxStorage){
+            tmpMana = maxStorage - mana;
+        }
+        mana += tmpMana;
+        PlayerData.removePlayerMana(player, tmpMana);
+        setState(state, mana, maxStorage);
+        PathOfMage.LOGGER.info("Block: " + mana);
+        markDirty();
+    }
+
+    public void setState(BlockState state, int mana, int maxStorage){
         if (mana >= maxStorage / 2){
             world.setBlockState(pos, state.with(MANA, 15));
         }
@@ -107,8 +131,6 @@ public class ManaStorageBlockEntity extends BlockEntity {
         else {
             world.setBlockState(pos, state.with(MANA, 0));
         }
-        PathOfMage.LOGGER.info("Block: " + mana);
-        markDirty();
     }
     @Override
     protected void addComponents(ComponentMap.Builder componentMapBuilder)
@@ -126,5 +148,4 @@ public class ManaStorageBlockEntity extends BlockEntity {
             this.mana = mana;
         }
     }
-
 }

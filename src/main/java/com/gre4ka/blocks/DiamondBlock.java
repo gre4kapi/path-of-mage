@@ -18,16 +18,4 @@ public class DiamondBlock extends ManaStorageBlock implements BlockEntityProvide
     public BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new DiamondBlockEntity(pos, state);
     }
-    @Override
-    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) {
-            DiamondBlockEntity blockEntity = (DiamondBlockEntity) world.getBlockEntity(pos);
-            int playermana = PlayerData.readPlayerMana((IDataSaver) player);
-            int blockmana = blockEntity.getStorageMana();
-            blockEntity.addStorageMana(player, pos, state);
-        }
-
-        return ActionResult.SUCCESS;
-    }
-
 }

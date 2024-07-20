@@ -1,6 +1,8 @@
 package com.gre4ka.client.event;
 
 import com.gre4ka.PathOfMage;
+import com.gre4ka.client.render.Dimension.DimensionRendering;
+import com.gre4ka.client.render.Dimension.MagpathRegisterDimensionEffectsEvent;
 import com.gre4ka.config.ConfigUI;
 import com.gre4ka.network.payload.SpeechPayload;
 import com.gre4ka.client.render.player.ManaHudOverlay;
@@ -54,6 +56,8 @@ public class ClientEventHandler {
         ClientLifecycleEvents.CLIENT_STOPPING.register(ClientEventHandler::handleClientStopEvent);
 
         HudRenderCallback.EVENT.register(new ManaHudOverlay());
+
+        MagpathRegisterDimensionEffectsEvent.EVENT.addListener(DimensionRendering::registerDimensionEffects);
     }
     public static void registerKeyBinds(){
         vKeyBinding = new KeyBinding("key.magpath.mic", InputUtil.Type.KEYSYM, GLFW.GLFW_KEY_V, KeyBinding.MISC_CATEGORY);
