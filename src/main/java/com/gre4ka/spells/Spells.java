@@ -44,13 +44,13 @@ public class Spells {
     }
     private static void FireballSpell(ServerPlayNetworking.Context context, ServerPlayerEntity player, ServerWorld world) {
         Vec3d vec3d = player.getRotationVec(1.0f);
-        FireballEntity fireballEntity = new FireballEntity(world, player, vec3d, 200);
+        FireballEntity fireballEntity = new FireballEntity(world, player, vec3d, 50);
         fireballEntity.setPosition(player.getX() + vec3d.x * 4.0, player.getBodyY(0.5) + 0.5, fireballEntity.getZ() + vec3d.z * 4.0);
         fireballEntity.setVelocity(player, player.getPitch(), player.getYaw(), 0.0f, 2.5f, 1.0f);
         fireballEntity.setNoGravity(true);
         world.spawnEntity(fireballEntity);
         fireballEntity.checkDespawn();
-        PlayerData.removePlayerMana(context.player(), 100);
+        PlayerData.removePlayerMana(context.player(), 10);
     }
 
 }

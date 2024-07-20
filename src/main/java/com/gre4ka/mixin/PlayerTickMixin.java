@@ -1,7 +1,10 @@
 package com.gre4ka.mixin;
 
+import com.gre4ka.PathOfMage;
 import com.gre4ka.util.IDataSaver;
+import com.gre4ka.util.ModRegistry;
 import com.gre4ka.util.PlayerData;
+import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +25,8 @@ public abstract class PlayerTickMixin {
 	@Inject(method = "tick", at = @At("HEAD"))
 	protected void tick(CallbackInfo ci) {
 		float manaGenSpd = ((IDataSaver) player).getPersistentData().getFloat("manaGenSpd");
-		int m = 0;
+		int mana = ((IDataSaver) player).getPersistentData().getInt("mana");
+		int m = 1;
 		if (manaGenSpd != 0f) {
 			if (manaGenSpd == 0.01f) {
 				m = 2000;
@@ -33,6 +37,13 @@ public abstract class PlayerTickMixin {
 			}
 			if (timer % m == 0) {
 				PlayerData.addPlayerMana(player, 1);
+			}
+		}
+		if(timer % 10 == 0) {
+			if (mana < 0) {
+				if (mana >= -100) {
+					player.addStatusEffect(new StatusEffectInstance(ModRegistry.MAGICAL_EXHAUSTION, 10, 1));
+				}
 			}
 		}
 		timer++;

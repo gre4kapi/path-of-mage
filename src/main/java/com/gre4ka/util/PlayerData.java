@@ -45,7 +45,6 @@ public class PlayerData {
         int tmpMana = mana - amount;
         if (tmpMana < 0 && tmpMana > -100){
             mana = tmpMana;
-            player.addStatusEffect(new StatusEffectInstance(ModRegistry.MAGICAL_EXHAUSTION, 100, 3));
         }
         else{
             mana = tmpMana;

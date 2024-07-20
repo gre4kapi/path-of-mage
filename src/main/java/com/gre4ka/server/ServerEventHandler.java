@@ -8,6 +8,7 @@ import com.gre4ka.network.payload.TrueVisionSyncPayload;
 import com.gre4ka.util.IDataSaver;
 import com.gre4ka.util.PlayerData;
 import net.fabricmc.fabric.api.entity.event.v1.ServerPlayerEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -15,6 +16,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -33,21 +35,31 @@ public class ServerEventHandler {
     static int maxMana;
 
     public static void register() {
-        //ServerTickEvents.START_SERVER_TICK.register(ServerEventHandler::serverTickEvent);
+        ServerTickEvents.START_SERVER_TICK.register(ServerEventHandler::serverTickEvent);
         ServerPlayConnectionEvents.JOIN.register(ServerEventHandler::joinEvent);
         AttackBlockCallback.EVENT.register(ServerEventHandler::onLeftClickBlock);
     }
 
+    private static void serverTickEvent(MinecraftServer minecraftServer) {
+        timer++;
+    }
+
     private static ActionResult onLeftClickBlock(PlayerEntity player, World world, Hand hand, BlockPos pos, Direction direction) {
-        if(!world.isClient()) {
-            BlockState state = world.getBlockState(pos);
-            if (state.getBlock() instanceof ManaStorageBlock) {
-                if(world.getBlockEntity(pos) instanceof ManaStorageBlockEntity blockEntity){
-                    blockEntity.retrieveStorageMana(player, pos, state);
+        if(timer > 3) {
+            if (!world.isClient()) {
+                BlockState state = world.getBlockState(pos);
+                if (state.getBlock() instanceof ManaStorageBlock) {
+                    if (world.getBlockEntity(pos) instanceof ManaStorageBlockEntity blockEntity) {
+                        if (player.getMainHandStack().isEmpty()) {
+                            blockEntity.retrieveStorageMana(player, pos, state);
+                            timer = 0;
+                            return ActionResult.SUCCESS;
+                        }
+                    }
                 }
             }
         }
-        return ActionResult.SUCCESS;
+        return ActionResult.PASS;
     }
 
     private static void joinEvent(ServerPlayNetworkHandler serverPlayNetworkHandler, PacketSender packetSender, MinecraftServer minecraftServer) {

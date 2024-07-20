@@ -86,7 +86,8 @@ public class ManaStorageBlockEntity extends BlockEntity {
 
     public void addStorageMana(PlayerEntity player, BlockPos pos, BlockState state) {
         int tmpMana;
-        int playermana = PlayerData.readPlayerMana((IDataSaver) player);
+        NbtCompound nbt = ((IDataSaver) player).getPersistentData();
+        int playermana = nbt.getInt("mana");
         if (playermana >= maxInput){
             tmpMana = maxInput;
         }
@@ -99,25 +100,28 @@ public class ManaStorageBlockEntity extends BlockEntity {
         mana += tmpMana;
         PlayerData.removePlayerMana(player, tmpMana);
         setState(state, mana, maxStorage);
-        PathOfMage.LOGGER.info("Block: " + mana);
+        PathOfMage.LOGGER.info("Added mana to Block: " + mana);
         markDirty();
     }
     public void retrieveStorageMana(PlayerEntity player, BlockPos pos, BlockState state) {
         int tmpMana;
-        int playermana = PlayerData.readPlayerMana((IDataSaver) player);
-        if (playermana >= maxInput){
-            tmpMana = maxInput;
+        //int playermana = PlayerData.readPlayerMana((IDataSaver) player);
+        NbtCompound nbt = ((IDataSaver) player).getPersistentData();
+        int playerMaxMana = nbt.getInt("maxMana");
+        int playerMana = nbt.getInt("mana");
+        if (mana >= maxOutput){
+            tmpMana = maxOutput;
         }
         else{
-            tmpMana = playermana;
+            tmpMana = mana;
         }
-        if (tmpMana + mana >= maxStorage){
-            tmpMana = maxStorage - mana;
+        if (tmpMana + playerMana >= playerMaxMana){
+            tmpMana = playerMaxMana - playerMana;
         }
-        mana += tmpMana;
-        PlayerData.removePlayerMana(player, tmpMana);
+        mana -= tmpMana;
+        PlayerData.addPlayerMana(player, tmpMana);
         setState(state, mana, maxStorage);
-        PathOfMage.LOGGER.info("Block: " + mana);
+        PathOfMage.LOGGER.info("Removed mana from Block: " + mana +  " MaxMana: " + playerMaxMana + " tmpMana: " + tmpMana);
         markDirty();
     }
 

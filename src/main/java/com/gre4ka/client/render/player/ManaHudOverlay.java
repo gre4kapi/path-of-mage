@@ -41,16 +41,16 @@ public class ManaHudOverlay implements HudRenderCallback {
                 RenderSystem.setShader(GameRenderer::getPositionTexProgram);
                 drawContext.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 RenderSystem.setShaderTexture(0, EMPTY_MANA);
-                drawContext.drawTexture(EMPTY_MANA, x, y, 0, 0, 30, 104, 30, 104);
+                drawContext.drawTexture(EMPTY_MANA, x, y+9, 0, 0, 30, 104, 30, 104);
                 //drawContext.drawHorizontalLine(-3, -28, 98, 0xFF00FF00);
 
-                int mana = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getInt("mana");
+                float mana = (float) ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getInt("mana");
                 int maxMana = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getInt("maxMana");
                 float manaGenSpd = ((IDataSaver) MinecraftClient.getInstance().player).getPersistentData().getFloat("manaGenSpd");
-                int step = maxMana / 100;
+                float step = ((float)maxMana) / 100;
                 if(step != 0) {
                     for (int i = 0; i < mana / step; i++) {
-                        drawContext.drawHorizontalLine(x + 2, x + 27, y + 101 - i, 0xBB5522FF);
+                        drawContext.drawHorizontalLine(x + 2, x + 27, y + 110 - i, 0xBB5522FF);
                     }
                 }
                 drawContext.drawText(client.textRenderer, Text.of("Mana: " + String.valueOf(mana) + " MaxMana: " + String.valueOf(maxMana) + " ManaGenSpd: " + String.valueOf(manaGenSpd)), x, y, 0xFFFFFFFF, false);
